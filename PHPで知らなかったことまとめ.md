@@ -1,8 +1,11 @@
 # define()
-名前を指定して定数を定義することができる
+
+名前を指定して定数を定義することができる。const.php 的なファイルを作って定数を管理するときに使えそう。
+
 ```
 define(string $constant_name, mixed $value, bool $case_insensitive = false): bool
 ```
+
 # php_sapi_name()
 ウェブサーバーと PHP の間のインターフェイスの型を返す
 
@@ -37,3 +40,9 @@ foreach (array(1, 2, 3, 4) as $value) {
 的なことをして、繰り返しから抜けた後に `$value` には4が入っている問題(闇)
 
 * $valueを他でも使いたいなとか思ったら `unset($value)`とかしましょう。
+
+## PHPで現在のURLを取得する方法
+
+```
+echo $_SERVER["REQUEST_URI"];
+```
