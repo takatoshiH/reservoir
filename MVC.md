@@ -24,6 +24,10 @@ wilipedia : https://ja.wikipedia.org/wiki/Model_View_Controller
 ## MVCの関連
 ![mvc](mvc.png)
 
+## MVC + service
+
+## MVC + cervice + repository
+
 ## Facadeパターン
 コンピュータソフトウェアのデザインパターンの1つである。Facade（ファサード）とは「建物の正面」を意味する。異なるサブシステムを単純な操作だけを持ったFacadeクラスで結び、サブシステム間の独立性を高める事を目的とする。
 
