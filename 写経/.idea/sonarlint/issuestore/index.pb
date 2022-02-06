@@ -1,0 +1,3 @@
+
+S
+#single_responsibility_principle.php,4/3/43c4c6dc11d3b2b0e6caf33d04bd6574d0ffe996
