@@ -16,3 +16,5 @@ bc」は計算を処理するコマンドです。
 
 ### seq
 連続番号の他、一定間隔置きに数字の列を出力するコマンド
+# tokyo_sadistic_learning
+# tokyo_sadistic_learning
