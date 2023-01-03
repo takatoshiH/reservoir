@@ -1,0 +1,65 @@
+<html>
+<head>
+</head>
+<script type="text/javascript" src="tree.js"></script>
+<body>
+<div id="books_field">
+</div>
+</body>
+<script>
+	const rowTree = '{"tree":[{"type":"file","id":"div1", "name" : "Book1"},{"type":"folder","id":"div2", "name" : "folder1", "children":[{"type":"file","id":"div3", "name" : "Book2"}]}]}'
+
+	//これを動的に書き換える
+	let treeObject = JSON.parse(rowTree);
+    console.log(treeObject);
+
+    const books_field = document.getElementById("books_field");
+
+    for (const tree of treeObject["tree"]) {
+
+        // topのファイル
+        if(tree["type"] === "file") {
+            const text =  tree["name"] + "ファイル";
+            books_field.appendChild(createBookElement(tree["name"], text, ["div_content", "file_content"]));
+
+		} else {
+			const text = tree["name"] + "フォルダ";
+            const content = createBookElement(tree["name"], text, ["div_content"])
+            books_field.appendChild(content);
+
+            // 2階層目のフォルダとファイル
+            for (const child of tree["children"]) {
+                const text = tree["name"] + "フォルダかファイル";
+
+				if(child["type"] === "file") {
+                    content.appendChild(createBookElement(tree["name"], text, ["div_content", "file_content"]));
+				} else {
+                    content.appendChild(createBookElement(tree["name"], text, ["div_content"]));
+				}
+			}
+		}
+	}
+
+    function createBookElement(own_id, text, classes) {
+        const div = document.createElement('div');
+        div.id = own_id;
+        div.textContent = text;
+        div.setAttribute("draggable", true);
+
+        for (const applyClass of classes) {
+            div.classList.add(applyClass);
+		}
+
+        return div;
+	}
+
+</script>
+<style>
+    .div_content { background-color: red; }
+    .div_content { height: 20%; }
+    .div_content { margin: 5%; }
+    .div_content { width: 30%; }
+
+    .file_content { background-color: blue}
+</style>
+</html>

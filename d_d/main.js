@@ -56,7 +56,7 @@ window.addEventListener('load', () => {
         if (itemId !== '') {
             dropTarget.innerHTML = document.getElementById(itemId).innerHTML;
             alert(document.getElementById(itemId).textContent);
-            document.getElementById(itemId).parentNode.removeChild( document.getElementById(itemId));
+            document.getElementById(itemId).parentNode.removeChild(document.getElementById(itemId));
         }
     })
 })

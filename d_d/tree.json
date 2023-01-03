@@ -1,0 +1,18 @@
+{
+  "tree": [
+    {
+      "type": "file",
+      "id": "div1"
+    },
+    {
+      "type": "folder",
+      "id": "div2",
+      "children": [
+        {
+          "type": "file",
+          "id": "div3"
+        }
+      ]
+    }
+  ]
+}
