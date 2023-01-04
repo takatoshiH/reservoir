@@ -23,7 +23,6 @@
         }
     })
 
-
     for (const tree of treeObject["tree"]) {
         if(isFile(tree["type"])) {
             books_field.appendChild(createBookElement(tree["id"], tree["name"], ["div_content", "file_content"]));
