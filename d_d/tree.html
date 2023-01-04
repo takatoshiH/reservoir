@@ -1,56 +1,85 @@
 <html>
-<head>
-</head>
-<script type="text/javascript" src="tree.js"></script>
+<head></head>
 <body>
-<div id="books_field">
-</div>
+<div id="books_field"></div>
 </body>
 <script>
 	const rowTree = '{"tree":[{"type":"file","id":"div1", "name" : "Book1"},{"type":"folder","id":"div2", "name" : "folder1", "children":[{"type":"file","id":"div3", "name" : "Book2"}]}]}'
-
-	//これを動的に書き換える
-	let treeObject = JSON.parse(rowTree);
-    console.log(treeObject);
-
+	const treeObject = JSON.parse(rowTree);
     const books_field = document.getElementById("books_field");
 
+    console.log(treeObject);
+
     for (const tree of treeObject["tree"]) {
-
-        // topのファイル
-        if(tree["type"] === "file") {
-            const text =  tree["name"] + "ファイル";
-            books_field.appendChild(createBookElement(tree["name"], text, ["div_content", "file_content"]));
-
+        if(isFile(tree["type"])) {
+            books_field.appendChild(createBookElement(tree["id"], tree["name"], ["div_content", "file_content"]));
 		} else {
-			const text = tree["name"] + "フォルダ";
-            const content = createBookElement(tree["name"], text, ["div_content"])
+            const content = createBookElement(tree["id"], tree["name"], ["div_content"])
             books_field.appendChild(content);
 
-            // 2階層目のフォルダとファイル
             for (const child of tree["children"]) {
-                const text = tree["name"] + "フォルダかファイル";
-
-				if(child["type"] === "file") {
-                    content.appendChild(createBookElement(tree["name"], text, ["div_content", "file_content"]));
-				} else {
-                    content.appendChild(createBookElement(tree["name"], text, ["div_content"]));
-				}
+                const classes = isFile(child["type"]) ? ["div_content", "file_content"] : ["div_content"];
+                content.appendChild(createBookElement(child["id"], child["name"], classes));
 			}
 		}
 	}
 
+    // ドラッグ&ドロップの設定
+	for (const item of document.querySelectorAll('.div_content')) {
+        item.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', event.target.id);
+        })
+
+        item.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'copy';
+        })
+
+        item.addEventListener('drop', (event) => {
+            event.preventDefault();
+			const itemId = event.dataTransfer.items ? event.dataTransfer.getData(event.dataTransfer.items[0]["type"]) : "";
+
+            if (itemId !== '') {
+                event.target.appendChild(document.getElementById(itemId));
+            }
+        })
+    }
+
     function createBookElement(own_id, text, classes) {
-        const div = document.createElement('div');
-        div.id = own_id;
-        div.textContent = text;
-        div.setAttribute("draggable", true);
+        const bookElement = document.createElement('div');
+        bookElement.id = own_id;
+        bookElement.textContent = text;
+        bookElement.setAttribute("draggable", true);
 
         for (const applyClass of classes) {
-            div.classList.add(applyClass);
+            bookElement.classList.add(applyClass);
 		}
 
-        return div;
+        return bookElement;
+	}
+
+    function isFile(type) {
+        return type === "file";
+	}
+
+    // 木構造の中での移動
+    function moveItem(own_id, parent_id) {
+        // 自身のidに対応する構造体を探す
+
+		// 親になるidに対応する構造体を探す
+	}
+
+    // 木構造から該当のleafを探す
+    function searchIdFromTree(id) {
+        for (const top of treeObject["tree"]) {
+            for (const child of top["children"]) {
+                for (const grandChild of child["children"]) {
+                    if (grandChild["id"] === id) {
+                        return grandChild;
+					}
+				}
+			}
+		}
 	}
 
 </script>
