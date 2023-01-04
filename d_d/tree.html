@@ -4,11 +4,25 @@
 <div id="books_field"></div>
 </body>
 <script>
-	const rowTree = '{"tree":[{"type":"file","id":"div1", "name" : "Book1"},{"type":"folder","id":"div2", "name" : "folder1", "children":[{"type":"file","id":"div3", "name" : "Book2"}]}]}'
+	const rowTree = '{"tree":[{"type":"file","id":"div1","name":"Book1"},{"type":"file","id":"div4","name":"Book4"},{"type":"folder","id":"div2","name":"folder1","children":[{"type":"file","id":"div3","name":"Book2"}]}]}'
 	const treeObject = JSON.parse(rowTree);
     const books_field = document.getElementById("books_field");
+    books_field.style.backgroundColor = "gray";
 
-    console.log(treeObject);
+    books_field.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+    })
+
+    books_field.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const itemId = event.dataTransfer.items ? event.dataTransfer.getData(event.dataTransfer.items[0]["type"]) : "";
+
+        if (itemId !== '') {
+            books_field.appendChild(document.getElementById(itemId));
+        }
+    })
+
 
     for (const tree of treeObject["tree"]) {
         if(isFile(tree["type"])) {
@@ -27,15 +41,18 @@
     // ドラッグ&ドロップの設定
 	for (const item of document.querySelectorAll('.div_content')) {
         item.addEventListener('dragstart', (event) => {
+            event.stopPropagation();
             event.dataTransfer.setData('text/plain', event.target.id);
         })
 
         item.addEventListener('dragover', (event) => {
+            event.stopPropagation();
             event.preventDefault();
             event.dataTransfer.dropEffect = 'copy';
         })
 
         item.addEventListener('drop', (event) => {
+            event.stopPropagation();
             event.preventDefault();
 			const itemId = event.dataTransfer.items ? event.dataTransfer.getData(event.dataTransfer.items[0]["type"]) : "";
 
@@ -63,7 +80,7 @@
 	}
 
     // 木構造の中での移動
-    function moveItem(own_id, parent_id) {
+    function moveItem(own, willParent) {
         // 自身のidに対応する構造体を探す
 
 		// 親になるidに対応する構造体を探す
@@ -72,14 +89,27 @@
     // 木構造から該当のleafを探す
     function searchIdFromTree(id) {
         for (const top of treeObject["tree"]) {
-            for (const child of top["children"]) {
-                for (const grandChild of child["children"]) {
-                    if (grandChild["id"] === id) {
-                        return grandChild;
+            if(isFile(top["type"])) {
+                if (top["id"] === id) {
+                    return [top, null];
+                }
+			} else {
+                for (const child of top["children"]) {
+                    if(isFile(child["type"])) {
+                        if (child["id"] === id) {
+                            return [child, top.id];
+                        }
+					} else {
+                        for (const grandChild of child["children"]) {
+                            if (grandChild["id"] === id) {
+                                return [grandChild, child.id];
+                            }
+                        }
 					}
-				}
+                }
 			}
 		}
+        return null;
 	}
 
 </script>
